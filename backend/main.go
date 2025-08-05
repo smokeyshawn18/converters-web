@@ -60,10 +60,12 @@ func main() {
 	}))
 	slog.SetDefault(logger)
 
+if os.Getenv("RENDER") == "" {
 	if err := godotenv.Load(); err != nil {
-		logger.Error("Failed to load .env file", "error", err)
-		os.Exit(1)
+		logger.Warn("No .env file found (running locally?)", "error", err)
 	}
+}
+
 
 	allowedOrigin := os.Getenv("ALLOWED_ORIGIN")
 	if allowedOrigin == "" {
