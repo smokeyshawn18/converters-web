@@ -27,8 +27,9 @@ export default function URLShortener() {
     setIsLoading(true);
 
     try {
+      const API_URL = process.env.BACKEND_URL || "http://localhost:8080";
       const shortened = await toast.promise(
-        fetch("http://localhost:8080/url/shorten", {
+        fetch(`${API_URL}/url/shorten`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
