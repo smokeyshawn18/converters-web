@@ -23,7 +23,7 @@ func corsMiddleware(next http.Handler, allowedOrigin string) http.Handler {
         origin := r.Header.Get("Origin")
         allowedOrigins := []string{
             "http://localhost:3000",
-			"http://getit.vercel.app",
+			"https://converters-web.vercel.app/",
             "http://127.0.0.1:3000",
             "http://frontend:3000", // For Docker
         }
