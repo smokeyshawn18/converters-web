@@ -18,31 +18,35 @@ import (
 	"golang.org/x/time/rate"
 )
 
-func corsMiddleware(next http.Handler, allowedOrigin string) http.Handler {
+func corsMiddleware(next http.Handler) http.Handler {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
         origin := r.Header.Get("Origin")
-        allowedOrigins := []string{
-            "http://localhost:3000",
-			"https://converters-web.vercel.app/",
-            "http://127.0.0.1:3000",
-            "http://frontend:3000", // For Docker
+        allowedOrigins := map[string]bool{
+            "http://localhost:3000":              true,
+            "http://127.0.0.1:3000":              true,
+            "http://frontend:3000":               true,
+            "https://converters-web.vercel.app": true,
         }
-        for _, allowed := range allowedOrigins {
-            if origin == allowed {
-                w.Header().Set("Access-Control-Allow-Origin", origin)
-                break
-            }
+
+        if allowedOrigins[origin] {
+            w.Header().Set("Access-Control-Allow-Origin", origin)
+            w.Header().Set("Vary", "Origin")
         }
+
         w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-        w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Accept, Authorization, authorization")
+        w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Accept, Authorization")
         w.Header().Set("Access-Control-Max-Age", "86400")
+
         if r.Method == http.MethodOptions {
-            w.WriteHeader(http.StatusOK)
+            w.WriteHeader(http.StatusNoContent)
             return
         }
+
         next.ServeHTTP(w, r)
     })
 }
+
+
 
 func rateLimitMiddleware(next http.Handler, requests int, window time.Duration) http.Handler {
 	limiter := rate.NewLimiter(rate.Every(window), requests)
@@ -111,7 +115,7 @@ mux.HandleFunc("/youtube/mp3", handlers.YoutubeToMP3Handler(logger))
 	mux.HandleFunc("/document/convert", handlers.DocConvertHandler(pool, logger))
 
 
-	handler := corsMiddleware(mux, allowedOrigin)
+	handler := corsMiddleware(mux)
 	handler = rateLimitMiddleware(handler, rateLimitRequests, rateLimitWindow)
 
 	server := &http.Server{
