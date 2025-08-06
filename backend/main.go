@@ -22,9 +22,7 @@ func corsMiddleware(next http.Handler) http.Handler {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
         origin := r.Header.Get("Origin")
         allowedOrigins := map[string]bool{
-            "http://localhost:3000":              true,
-            "http://127.0.0.1:3000":              true,
-            "http://frontend:3000":               true,
+            "http://localhost:3000": true,
             "https://converters-web.vercel.app": true,
         }
 
