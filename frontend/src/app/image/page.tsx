@@ -28,8 +28,7 @@ export default function ImageConverter() {
     const toastId = toast.loading("Converting image...");
 
     try {
-      const API_URL =
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+      const API_URL = process.env.BACKEND_URL || "http://localhost:8080";
       const formData = new FormData();
       formData.append("file", file);
 

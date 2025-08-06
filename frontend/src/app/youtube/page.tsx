@@ -20,8 +20,7 @@ export default function YouTubeToMP3() {
     const toastId = toast.loading("Processing your download...");
 
     try {
-      const API_URL =
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+      const API_URL = process.env.BACKEND_URL || "http://localhost:8080";
 
       const response = await fetch(
         `${API_URL}/youtube/mp3?url=${encodeURIComponent(url)}`,

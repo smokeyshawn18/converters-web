@@ -62,7 +62,7 @@ func UrlShortenHandler(pool *pgxpool.Pool, logger *slog.Logger) http.HandlerFunc
 
 		resp := struct {
 			ShortURL string `json:"shortUrl"`
-		}{ShortURL: "http://localhost:8080/url/" + shortKey}
+		}{ShortURL: "" + shortKey}
 		w.Header().Set("Content-Type", "application/json")
 		if err := json.NewEncoder(w).Encode(resp); err != nil {
 			logger.Error("Failed to encode response", "error", err)

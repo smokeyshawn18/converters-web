@@ -50,8 +50,7 @@ export default function DocumentConverter() {
     );
 
     try {
-      const API_URL =
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+      const API_URL = process.env.BACKEND_URL || "http://localhost:8080";
       const formData = new FormData();
       formData.append("file", file);
       formData.append("format", format);
